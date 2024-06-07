@@ -2,6 +2,7 @@ import {Component } from '@angular/core';
 import {AppStateService} from "../../services/app-state.service";
 import {LoadingService} from "../../services/loading.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-navbar',
@@ -11,10 +12,10 @@ import {Router} from "@angular/router";
 
 export class NavbarComponent {
 
-  constructor(public appState :AppStateService, public loadingService : LoadingService, private router : Router) { }
+  constructor(private authService: AuthService, public appState :AppStateService, public loadingService : LoadingService, private router : Router) { }
 
   logout() {
-    this.appState.authState={};
+    this.authService.logout();
     this.router.navigateByUrl("/login");
   }
 

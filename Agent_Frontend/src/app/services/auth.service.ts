@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {firstValueFrom} from "rxjs";
 import {AppStateService} from "./app-state.service";
 import {jwtDecode} from "jwt-decode";
@@ -31,6 +31,19 @@ export class AuthService {
       return Promise.resolve(true);
     } else {
       return Promise.reject("Bad credentials");
+    }
+  }
+
+  async changePassword(oldPassword: string, newPassword: string) {
+    const phone = this.appState.authState.phone;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    const body = { oldPassword, newPassword };
+
+    try {
+      const response = await firstValueFrom(this.http.post(`http://localhost:port-backend/users/${phone}/change-password`, body, { headers }));
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject("Failed to change password");
     }
   }
 

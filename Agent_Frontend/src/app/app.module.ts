@@ -13,6 +13,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { NotAuthorizedComponent } from './components/not-authorized/not-authorized.component';
 import { AppHttpInterceptor } from "./services/app-http.interceptor";
 import { WalletComponent } from './components/wallet/wallet.component';
+import {NgIf} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,10 @@ import { WalletComponent } from './components/wallet/wallet.component';
     HttpClientModule,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    NgIf,
+    ReactiveFormsModule,
+    NgIf
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true }
