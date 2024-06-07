@@ -1,4 +1,4 @@
-export interface Agent {
+export interface Client {
   id: number;
   firstName: string;
   lastName: string;

@@ -13,8 +13,13 @@ export class AgentListComponent implements OnInit {
   constructor(private agentService: AgentService) { }
 
   ngOnInit() {
-    this.agentService.getAgents().subscribe(response => {
-      this.agents = response;
+    this.agentService.getAgents().subscribe({
+      next: (response) => {
+        this.agents = response;
+      },
+      error: (error) => {
+        console.error('Error fetching agents', error);
+      }
     });
   }
 }

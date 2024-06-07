@@ -7,23 +7,15 @@ import { Agent } from '../model/agent.model';
   providedIn: 'root'
 })
 export class AgentService {
-  private backendHost = 'http://localhost:port-backend/agents';
+  private backendHost : string = "http://localhost:port-backend";
 
   constructor(private http: HttpClient) { }
 
   createAgent(agent: Agent): Observable<Agent> {
-    const formData = new FormData();
-    formData.append('firstName', agent.firstName);
-    formData.append('lastName', agent.lastName);
-    formData.append('email', agent.email);
-    formData.append('phone', agent.phone);
-    formData.append('cinFront', agent.cinFront as File);
-    formData.append('cinBack', agent.cinBack as File);
-
-    return this.http.post<Agent>(this.backendHost, formData);
+    return this.http.post<Agent>(`${this.backendHost}/agents`, agent);
   }
 
   getAgents(): Observable<Agent[]> {
-    return this.http.get<Agent[]>(this.backendHost);
+    return this.http.get<Agent[]>(`${this.backendHost}/agents`);
   }
 }
