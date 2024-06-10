@@ -1,72 +1,83 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AgentService } from '../../services/agent.service';
-import { Agent } from '../../model/agent.model';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-agent-form',
+  selector: 'app-agent-creation',
   templateUrl: './agent-form.component.html',
   styleUrls: ['./agent-form.component.css']
 })
-export class AgentFormComponent implements OnInit{
-  public agentForm!: FormGroup;
-  isSuccess: boolean = false;
-  errorMessage: string = '';
+export class AgentFormComponent implements OnInit {
+  agentForm!: FormGroup;
+  agentId: string | null = null;
+  agentPassword: string | null = null;
 
-  agent: Agent = {
-    id: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    cinFront: null,
-    cinBack: null
-  };
+  @ViewChild('cinFrontInput') cinFrontInput!: ElementRef;
+  @ViewChild('cinBackInput') cinBackInput!: ElementRef;
 
-  constructor(private formBuilder : FormBuilder, private agentService: AgentService) { }
+  constructor(private agentService: AgentService) { }
 
-  ngOnInit() {
-    this.agentForm = this.formBuilder.group({
-      firstName: this.formBuilder.control('', [Validators.required]),
-      lastName: this.formBuilder.control('', [Validators.required]),
-      email: this.formBuilder.control('', [Validators.required, Validators.email]),
-      phone: this.formBuilder.control('', [Validators.required, Validators.pattern('[0-9]{3}-[0-9]{3}-[0-9]{4}')]),
-      password: this.formBuilder.control(btoa(this.generatedPassword())),
-      cinFront: this.formBuilder.control(null, [Validators.required]),
-      cinBack: this.formBuilder.control(null, [Validators.required]),
+  ngOnInit(): void {
+    this.agentForm = new FormGroup({
+      lastName: new FormControl('', Validators.required),
+      firstName: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', Validators.required),
+      cinFront: new FormControl(null, Validators.required),
+      cinBack: new FormControl(null, Validators.required)
     });
   }
 
-  onFileSelected(event: Event, field: 'cinFront' | 'cinBack') {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.agent[field] = input.files[0];
-    }
-  }
-
   onSubmit() {
-    let agent : Agent = this.agentForm.value;
-    this.agentService.createAgent(this.agent).subscribe({
+    const formData = new FormData();
+    for (const key in this.agentForm.value) {
+      if (this.agentForm.value.hasOwnProperty(key)) {
+        const value = this.agentForm.value[key];
+        if (value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, value);
+        }
+      }
+    }
+
+    this.agentService.createAgent(formData).subscribe({
       next: (response) => {
         console.log('Agent created successfully', response);
-        this.isSuccess = true;
-        alert(`Agent created successfully! Agent password: ${atob(response.password)}`);
+        this.agentId = response.id.toString(); // Ensure the ID is a string
+        this.agentPassword = response.password;
+        this.agentForm.reset(); // Reset the form after successful submission
+        this.resetFileInputs(); // Reset the file inputs
       },
       error: (error) => {
-        console.log(error);
-        this.isSuccess = false;
-        this.errorMessage = 'Failed to create agent. Please try again.';
+        console.error('Error creating agent', error);
+      },
+      complete: () => {
+        console.log('Request complete');
       }
     });
   }
 
-  private generatedPassword(length = 12): string {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
-    let password = '';
-    for (let i = 0; i < length; i++) {
-      password += chars.charAt(Math.floor(Math.random() * chars.length));
+  resetFileInputs() {
+    if (this.cinFrontInput) {
+      this.cinFrontInput.nativeElement.value = '';
     }
-    return password;
+    if (this.cinBackInput) {
+      this.cinBackInput.nativeElement.value = '';
+    }
+  }
+
+  copyToClipboard(value: string) {
+    navigator.clipboard.writeText(value).then(() => {
+      console.log('Copied to clipboard successfully!');
+    }, (err) => {
+      console.error('Could not copy text: ', err);
+    });
+  }
+
+  onFileSelect(event: Event, controlName: string) {
+    const file = (event.target as HTMLInputElement).files![0];
+    this.agentForm.patchValue({ [controlName]: file });
+    this.agentForm.get(controlName)?.updateValueAndValidity();
   }
 }

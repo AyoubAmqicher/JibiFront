@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Agent } from '../model/agent.model';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { Agent } from "../model/agent.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn : 'root'
 })
+
 export class AgentService {
-  private backendHost : string = "http://localhost:port-backend";
+    private apiUrl = 'http://localhost:8080/api/agents';
+    constructor(private http : HttpClient){}
 
-  constructor(private http: HttpClient) { }
+    createAgent(agentData : FormData): Observable<any>{
+        return this.http.post<any>(`${this.apiUrl}/create`,agentData)
+    }
 
-  createAgent(agent: Agent): Observable<Agent> {
-    return this.http.post<Agent>(`${this.backendHost}/agents`, agent);
-  }
-
-  getAgents(): Observable<Agent[]> {
-    return this.http.get<Agent[]>(`${this.backendHost}/agents`);
-  }
+    getAllAgents(): Observable<Agent[]> {
+        return this.http.get<Agent[]>(`${this.apiUrl}/all`);
+    }
 }

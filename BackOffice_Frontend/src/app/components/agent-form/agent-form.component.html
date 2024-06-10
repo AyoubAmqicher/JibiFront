@@ -1,72 +1,62 @@
-<div class="max-w-lg mx-auto p-6 my-10 bg-white rounded-lg shadow-md border-2 border-blue-500">
-  <div *ngIf="isSuccess" class="p-2 mb-4 bg-green-200 text-green-700 border border-green-400 rounded">
-    Agent created successfully!
+<div class="container mx-auto mt-2">
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="bg-gray-100 px-6 py-4">
+      <h3 class="text-lg font-semibold">Create Agent</h3>
+    </div>
+    <div class="p-6">
+      <form [formGroup]="agentForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="lastName" class="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
+          <input type="text" formControlName="lastName" id="lastName" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter last name">
+          <div *ngIf="agentForm.get('lastName')?.invalid && agentForm.get('lastName')?.touched" class="text-red-500 text-sm mt-2">
+            Last Name is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="firstName" class="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+          <input type="text" formControlName="firstName" id="firstName" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter first name">
+          <div *ngIf="agentForm.get('firstName')?.invalid && agentForm.get('firstName')?.touched" class="text-red-500 text-sm mt-2">
+            First Name is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <input type="email" formControlName="email" id="email" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter email">
+          <div *ngIf="agentForm.get('email')?.invalid && agentForm.get('email')?.touched" class="text-red-500 text-sm mt-2">
+            Valid email is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
+          <input type="text" formControlName="phone" id="phone" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter phone number">
+          <div *ngIf="agentForm.get('phone')?.invalid && agentForm.get('phone')?.touched" class="text-red-500 text-sm mt-2">
+            Phone is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="cinFront" class="block text-gray-700 text-sm font-bold mb-2">CIN Front</label>
+          <input #cinFrontInput type="file" (change)="onFileSelect($event, 'cinFront')" id="cinFront" class="block w-full text-gray-500">
+          <div *ngIf="agentForm.get('cinFront')?.invalid && agentForm.get('cinFront')?.touched" class="text-red-500 text-sm mt-2">
+            CIN Front is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="cinBack" class="block text-gray-700 text-sm font-bold mb-2">CIN Back</label>
+          <input #cinBackInput type="file" (change)="onFileSelect($event, 'cinBack')" id="cinBack" class="block w-full text-gray-500">
+          <div *ngIf="agentForm.get('cinBack')?.invalid && agentForm.get('cinBack')?.touched" class="text-red-500 text-sm mt-2">
+            CIN Back is required.
+          </div>
+        </div>
+        <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" [disabled]="agentForm.invalid">Submit</button>
+      </form>
+    </div>
   </div>
-  <div *ngIf="errorMessage" class="p-2 mb-4 bg-red-200 text-red-700 border border-red-400 rounded">
-    {{ errorMessage }}
+
+  <div *ngIf="agentId && agentPassword" class="bg-white shadow-md rounded-lg overflow-hidden mt-4 mb-2">
+    <div class="p-6">
+      <h5 class="text-lg font-semibold">Agent Created</h5>
+      <p class="text-gray-700">Agent ID: <strong>{{ agentId }}</strong> <button class="ml-2 py-1 px-2 bg-gray-200 border border-gray-300 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" (click)="copyToClipboard(agentId)">Copy</button></p>
+      <p class="text-gray-700">Temporary Password: <strong>{{ agentPassword }}</strong> <button class="ml-2 py-1 px-2 bg-gray-200 border border-gray-300 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" (click)="copyToClipboard(agentPassword)">Copy</button></p>
+    </div>
   </div>
-  <h2 class="text-2xl font-bold mb-6">Create Agent</h2>
-  <form [formGroup]="agentForm" (ngSubmit)="onSubmit()" class="max-w-md mx-auto">
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-      <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-          </svg>
-        </div>
-        <input type="text" formControlName="firstName" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name">
-      </div>
-    </div>
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-      <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-          </svg>
-        </div>
-        <input type="text" formControlName="lastName" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last Name">
-      </div>
-    </div>
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email Address</label>
-      <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-            <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
-            <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
-          </svg>
-        </div>
-        <input type="email" formControlName="email" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Email address">
-      </div>
-    </div>
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
-      <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
-          </svg>
-        </div>
-        <input type="tel" formControlName="phone" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Phone">
-      </div>
-    </div>
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CIN Front</label>
-      <input (change)="onFileSelected($event, 'cinFront')" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
-    </div>
-
-    <div class="mb-5">
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CIN Back</label>
-      <input (change)="onFileSelected($event, 'cinBack')" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
-    </div>
-
-    <button type="submit" [disabled]="agentForm.invalid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Agent</button>
-  </form>
 </div>

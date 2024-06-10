@@ -1,17 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Client } from "../model/client.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn : 'root'
 })
-
 export class ClientService {
-  private host : string ="http://localhost:port-backend/";
-  constructor(private http: HttpClient) { }
+    private apiUrl = 'http://localhost:8080/api/clients';
 
-  saveClient(client: Client):Observable<Client> {
-    return this.http.post<Client>(`${this.host}/clients`, client);
-  }
+    constructor(private http : HttpClient) {}
+
+    createClient(clientData: FormData): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/create`, clientData);
+    }
+
+    getAllClients(): Observable<Client[]> {
+        return this.http.get<Client[]>(`${this.apiUrl}/all`);
+    }
 }

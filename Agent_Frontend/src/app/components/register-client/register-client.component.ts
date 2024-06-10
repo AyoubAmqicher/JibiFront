@@ -1,72 +1,74 @@
-import { Component, OnInit } from '@angular/core';
-import { ClientService } from '../../services/client.service';
-import { Client } from '../../model/client.model';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-register-client',
+  selector: 'app-client-registration',
   templateUrl: './register-client.component.html',
   styleUrls: ['./register-client.component.css']
 })
-export class RegisterClientComponent implements OnInit{
-  public clientForm!: FormGroup;
-  isSuccess: boolean = false;
-  errorMessage: string = '';
+export class RegisterClientComponent {
+  registrationForm: FormGroup;
+  cinFrontFile: File | null = null;
+  cinBackFile: File | null = null;
+  submitted = false;
+  showPasswordSection = false;
+  tempPassword = 'Temp@1234';
 
-  client: Client = {
-    id: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    cinFront: null,
-    cinBack: null
-  };
+  @ViewChild('cinFrontInput') cinFrontInput!: ElementRef;
+  @ViewChild('cinBackInput') cinBackInput!: ElementRef;
 
-  constructor(private formBuilder : FormBuilder, private clientService: ClientService) { }
-
-  ngOnInit() {
-    this.clientForm = this.formBuilder.group({
-      firstName: this.formBuilder.control('', [Validators.required]),
-      lastName: this.formBuilder.control('', [Validators.required]),
-      email: this.formBuilder.control('', [Validators.required, Validators.email]),
-      phone: this.formBuilder.control('', [Validators.required, Validators.pattern('[0-9]{3}-[0-9]{3}-[0-9]{4}')]),
-      password: this.formBuilder.control(btoa(this.generatedPassword())),
-      cinFront: this.formBuilder.control(null, [Validators.required]),
-      cinBack: this.formBuilder.control(null, [Validators.required]),
+  constructor(private fb: FormBuilder) {
+    this.registrationForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: [''],
+      phone: ['', Validators.required],
+      accountType: ['', Validators.required],
     });
   }
 
-  onFileSelected(event: Event, field: 'cinFront' | 'cinBack') {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.client[field] = input.files[0];
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
+    alert('Copied to clipboard');
+  }
+  
+  onFileChange(event: any, fileType: string) {
+    const file = event.target.files[0];
+    if (fileType === 'cinFront') {
+      this.cinFrontFile = file;
+    } else if (fileType === 'cinBack') {
+      this.cinBackFile = file;
+    }
+  }
+
+  resetFileInputs() {
+    if (this.cinFrontInput) {
+      this.cinFrontInput.nativeElement.value = '';
+    }
+    if (this.cinBackInput) {
+      this.cinBackInput.nativeElement.value = '';
     }
   }
 
   onSubmit() {
-    let client : Client = this.clientForm.value;
-    this.clientService.saveClient(this.client).subscribe({
-      next: (response) => {
-        console.log('Client created successfully', response);
-        this.isSuccess = true;
-        alert(`Client created successfully! Client password: ${atob(response.password)}`);
-      },
-      error: (error) => {
-        console.log(error);
-        this.isSuccess = false;
-        this.errorMessage = 'Failed to create client. Please try again.';
-      }
-    });
-  }
-
-  private generatedPassword(length = 12): string {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
-    let password = '';
-    for (let i = 0; i < length; i++) {
-      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    this.submitted = true;
+    if (this.registrationForm.valid && this.cinFrontFile && this.cinBackFile) {
+      const formData = new FormData();
+      formData.append('firstName', this.registrationForm.get('firstName')?.value);
+      formData.append('lastName', this.registrationForm.get('lastName')?.value);
+      formData.append('email', this.registrationForm.get('email')?.value);
+      formData.append('phone', this.registrationForm.get('phone')?.value);
+      formData.append('cinFront', this.cinFrontFile);
+      formData.append('cinBack', this.cinBackFile);
+      formData.append('accountType', this.registrationForm.get('accountType')?.value);
+      // Here you can send formData to your backend API
+      // this.http.post('your-api-endpoint', formData).subscribe(response => {
+      //   console.log(response);
+      // });
+      console.log('Form Submitted', formData);
+      this.showPasswordSection = true;
+      this.registrationForm.reset(); // Reset the form after successful submission
+        this.resetFileInputs();
     }
-    return password;
   }
 }
