@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-client-registration',
@@ -17,7 +18,9 @@ export class RegisterClientComponent {
   @ViewChild('cinFrontInput') cinFrontInput!: ElementRef;
   @ViewChild('cinBackInput') cinBackInput!: ElementRef;
 
-  constructor(private fb: FormBuilder) {
+  private apiUrl = 'http://localhost:8080/api/clients'; // Your backend API URL
+
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.registrationForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -44,9 +47,13 @@ export class RegisterClientComponent {
   resetFileInputs() {
     if (this.cinFrontInput) {
       this.cinFrontInput.nativeElement.value = '';
+      this.cinFrontFile = null; // Reset the variable
+
     }
     if (this.cinBackInput) {
       this.cinBackInput.nativeElement.value = '';
+      this.cinBackFile = null; // Reset the variable
+
     }
   }
 
@@ -60,15 +67,26 @@ export class RegisterClientComponent {
       formData.append('phone', this.registrationForm.get('phone')?.value);
       formData.append('cinFront', this.cinFrontFile);
       formData.append('cinBack', this.cinBackFile);
-      formData.append('accountType', this.registrationForm.get('accountType')?.value);
-      // Here you can send formData to your backend API
-      // this.http.post('your-api-endpoint', formData).subscribe(response => {
-      //   console.log(response);
-      // });
-      console.log('Form Submitted', formData);
-      this.showPasswordSection = true;
-      this.registrationForm.reset(); // Reset the form after successful submission
-        this.resetFileInputs();
+      const accountTypeValue = this.registrationForm.get('accountType')?.value;
+      const balance = parseFloat(accountTypeValue.replace('Compte', '').trim());
+      formData.append('balance', balance.toString());
+      
+      // Call the service method to send data to backend
+      this.http.post<any>(`${this.apiUrl}/create`, formData).subscribe({
+        next: (response) => {
+          console.log('Client created successfully', response);
+          this.tempPassword = response.temporaryPassword;
+          this.showPasswordSection = true;
+          this.registrationForm.reset(); // Reset the form after successful submission
+          this.resetFileInputs(); // Reset the file inputs
+        },
+        error: (error) => {
+          console.error('Error creating client', error);
+        },
+        complete: () => {
+          console.log('Request complete');
+        }
+      });
     }
   }
 }
