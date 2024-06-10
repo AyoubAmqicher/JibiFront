@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+<div class="container mx-auto mt-8">
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Paiement de facture</h2>
+
+  <!-- Tabs for "Liste des créanciers" and "Historique" -->
+  <div class="flex mb-4">
+    <button class="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-l dark:bg-gray-800 dark:text-white focus:outline-none">Liste des créanciers</button>
+    <button class="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-r dark:bg-gray-700 dark:text-white focus:outline-none">Historique</button>
+  </div>
+
+  <!-- Search bar -->
+  <div class="relative mb-6">
+    <input type="text" placeholder="Toutes les catégories" [(ngModel)]="searchQuery" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" (input)="filterBillers()">
+  </div>
+
+  <!-- Grid of billers -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let biller of paginatedBillers" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+      <a [routerLink]="['/pay-bill', biller.id]" class="flex items-center">
+        <img [src]="biller?.icon" alt="{{ biller?.name }}" class="w-12 h-12 rounded-full mr-4">
+        <div>
+          <h5 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">{{ biller?.name }}</h5>
+          <small class="text-gray-600 dark:text-gray-400">{{ biller?.description }}</small>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Pagination controls -->
+  <div class="flex justify-center mt-6">
+    <button (click)="previousPage()" [disabled]="currentPage === 1" class="px-4 py-2 mx-1 bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-white" aria-label="Previous">
+      Previous
+    </button>
+    <button *ngFor="let page of totalPagesArray" (click)="goToPage(page)" [class.bg-blue-500]="currentPage === page" [class.text-white]="currentPage === page" class="px-4 py-2 mx-1 bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+      {{ page }}
+    </button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 mx-1 bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-white" aria-label="Next">
+      Next
+    </button>
+  </div>
+</div>

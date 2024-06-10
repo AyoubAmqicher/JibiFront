@@ -14,6 +14,11 @@ import { NotAuthorizedComponent } from './components/not-authorized/not-authoriz
 import { AppHttpInterceptor } from "./services/app-http.interceptor";
 import { WalletComponent } from './components/wallet/wallet.component';
 import {NgIf} from "@angular/common";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PayBillComponent } from './components/pay-bill/pay-bill.component';
+import { PaymentDetailComponent } from './components/payment-detail/payment-detail.component';
+import { BillConfirmationComponent } from './components/bill-confirmation/bill-confirmation.component';
+import { VerifyCodeComponent } from './components/verify-code/verify-code.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,12 @@ import {NgIf} from "@angular/common";
     NavbarComponent,
     ChangePasswordComponent,
     NotAuthorizedComponent,
-    WalletComponent
+    WalletComponent,
+    DashboardComponent,
+    PayBillComponent,
+    PaymentDetailComponent,
+    BillConfirmationComponent,
+    VerifyCodeComponent
   ],
   imports: [
     BrowserModule,

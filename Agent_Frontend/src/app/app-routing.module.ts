@@ -7,9 +7,18 @@ import { NotAuthorizedComponent } from "./components/not-authorized/not-authoriz
 import { WalletComponent } from "./components/wallet/wallet.component";
 import { AuthenticationGuard } from "./guards/authentication.guard";
 import { AuthorizationGuard } from "./guards/authorization.guard";
+import {PayBillComponent} from "./components/pay-bill/pay-bill.component";
+import {DashboardComponent} from "./components/dashboard/dashboard.component";
+import {PaymentDetailComponent} from "./components/payment-detail/payment-detail.component";
+import {BillConfirmationComponent} from "./components/bill-confirmation/bill-confirmation.component";
+import {VerifyCodeComponent} from "./components/verify-code/verify-code.component";
 
 const routes: Routes = [
+  { path: 'pay-bill', component: PayBillComponent },
   {path : "login", component: LoginComponent},
+  { path: 'pay-bill/:id', component: PaymentDetailComponent },
+  { path: 'pay-bill/:billerId/bill/:billId', component: BillConfirmationComponent },
+  { path: 'verify-code/:billerId/:billId', component: VerifyCodeComponent },
   {
     // path : "agent", component : RegisterClientComponent,canActivate:[AuthenticationGuard], children :[
       path : "agent", component : RegisterClientComponent, children :[

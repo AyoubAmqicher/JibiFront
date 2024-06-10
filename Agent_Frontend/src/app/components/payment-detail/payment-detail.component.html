@@ -1,0 +1,51 @@
+<div class="container mx-auto mt-8">
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Effectuer un paiement</h2>
+  <div *ngIf="biller" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div class="flex items-center mb-6">
+      <img [src]="biller.icon" alt="{{ biller.name }}" class="w-16 h-16 rounded-full mr-4">
+      <div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ biller.name }}</h3>
+        <p class="text-gray-600 dark:text-gray-400">{{ biller.description }}</p>
+      </div>
+    </div>
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <div *ngFor="let field of biller.fields">
+        <label class="block text-gray-700 dark:text-gray-300">{{ field }}</label>
+        <input [(ngModel)]="formValues[field]" name="{{ field }}" type="text" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ field }}">
+      </div>
+      <div class="flex justify-end space-x-4">
+        <button (click)="cancelPayment()" class="px-4 py-2 bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">Annuler</button>
+        <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded-lg">Valider</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="showUnpaidBills" class="mt-8">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Factures Impayées</h2>
+    <div *ngIf="getUnpaidBills().length > 0; else noBills" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+        <thead>
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Référence</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Description</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Montant</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Action</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
+        <tr *ngFor="let bill of getUnpaidBills()">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ bill.reference }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ bill.description }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ bill.amount }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+            <button (click)="payBill(bill.id)" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Payer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noBills>
+      <p class="text-gray-900 dark:text-white">Aucune facture impayée trouvée pour ce créancier.</p>
+    </ng-template>
+  </div>
+</div>
