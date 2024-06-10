@@ -1,0 +1,62 @@
+<div class="container mx-auto mt-2">
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="bg-gray-100 px-6 py-4">
+      <h3 class="text-lg font-semibold">Create Agent</h3>
+    </div>
+    <div class="p-6">
+      <form [formGroup]="agentForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="lastName" class="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
+          <input type="text" formControlName="lastName" id="lastName" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter last name">
+          <div *ngIf="agentForm.get('lastName')?.invalid && agentForm.get('lastName')?.touched" class="text-red-500 text-sm mt-2">
+            Last Name is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="firstName" class="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+          <input type="text" formControlName="firstName" id="firstName" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter first name">
+          <div *ngIf="agentForm.get('firstName')?.invalid && agentForm.get('firstName')?.touched" class="text-red-500 text-sm mt-2">
+            First Name is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <input type="email" formControlName="email" id="email" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter email">
+          <div *ngIf="agentForm.get('email')?.invalid && agentForm.get('email')?.touched" class="text-red-500 text-sm mt-2">
+            Valid email is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
+          <input type="text" formControlName="phone" id="phone" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter phone number">
+          <div *ngIf="agentForm.get('phone')?.invalid && agentForm.get('phone')?.touched" class="text-red-500 text-sm mt-2">
+            Phone is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="cinFront" class="block text-gray-700 text-sm font-bold mb-2">CIN Front</label>
+          <input #cinFrontInput type="file" (change)="onFileSelect($event, 'cinFront')" id="cinFront" class="block w-full text-gray-500">
+          <div *ngIf="agentForm.get('cinFront')?.invalid && agentForm.get('cinFront')?.touched" class="text-red-500 text-sm mt-2">
+            CIN Front is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="cinBack" class="block text-gray-700 text-sm font-bold mb-2">CIN Back</label>
+          <input #cinBackInput type="file" (change)="onFileSelect($event, 'cinBack')" id="cinBack" class="block w-full text-gray-500">
+          <div *ngIf="agentForm.get('cinBack')?.invalid && agentForm.get('cinBack')?.touched" class="text-red-500 text-sm mt-2">
+            CIN Back is required.
+          </div>
+        </div>
+        <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" [disabled]="agentForm.invalid">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="agentId && agentPassword" class="bg-white shadow-md rounded-lg overflow-hidden mt-4 mb-2">
+    <div class="p-6">
+      <h5 class="text-lg font-semibold">Agent Created</h5>
+      <p class="text-gray-700">Agent ID: <strong>{{ agentId }}</strong> <button class="ml-2 py-1 px-2 bg-gray-200 border border-gray-300 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" (click)="copyToClipboard(agentId)">Copy</button></p>
+      <p class="text-gray-700">Temporary Password: <strong>{{ agentPassword }}</strong> <button class="ml-2 py-1 px-2 bg-gray-200 border border-gray-300 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" (click)="copyToClipboard(agentPassword)">Copy</button></p>
+    </div>
+  </div>
+</div>
