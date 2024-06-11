@@ -14,7 +14,7 @@ export class AppStateService {
     isAuthenticated : false,
     phone : undefined,
     roles : undefined,
-    token : undefined
+    accessToken : undefined
   }
 
   constructor() { }
