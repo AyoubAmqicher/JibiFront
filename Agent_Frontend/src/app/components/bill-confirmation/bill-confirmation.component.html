@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="container mx-auto mt-8">
   <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Paiement de facture</h2>
   <div *ngIf="biller && bill" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
@@ -10,10 +11,9 @@
     </div>
     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Récapitulatif des informations saisies</h3>
     <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-      <p class="text-gray-900 dark:text-white"><strong>Référence:</strong> {{ bill.reference }}</p>
+      <p class="text-gray-900 dark:text-white"><strong>Référence:</strong> {{ bill.id }}</p>
       <p class="text-gray-900 dark:text-white"><strong>Description:</strong> {{ bill.description }}</p>
       <p class="text-gray-900 dark:text-white"><strong>Montant:</strong> {{ bill.amount }}</p>
-      <p class="text-gray-900 dark:text-white"><strong>Date:</strong> {{ bill.date }}</p>
     </div>
     <div class="flex justify-end space-x-4 mt-6">
       <button (click)="cancelPayment()" class="px-4 py-2 bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">Abandonner la transaction</button>

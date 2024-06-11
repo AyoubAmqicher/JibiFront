@@ -35,13 +35,14 @@ export class ChangePasswordComponent implements OnInit {
     const oldPassword = this.formChangePassword.value.oldPassword;
     const newPassword = this.formChangePassword.value.newPassword;
 
-    this.authService.changePassword(oldPassword, newPassword)
-      .then(() => {
-        //this.router.navigateByUrl("/login");
-        alert(`Password changed successfully!`);
-      })
-      .catch(error => {
-        this.errorMessage = error;
-      });
-  }
+  //   this.authService.changePassword(oldPassword, newPassword)
+  //     .then(() => {
+  //       //this.router.navigateByUrl("/login");
+  //       alert(`Password changed successfully!`);
+  //     })
+  //     .catch(error => {
+  //       this.errorMessage = error;
+  //     });
+  // }
+}
 }

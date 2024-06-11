@@ -33,7 +33,7 @@ import { VerifyCodeComponent } from './components/verify-code/verify-code.compon
     PayBillComponent,
     PaymentDetailComponent,
     BillConfirmationComponent,
-    VerifyCodeComponent
+    VerifyCodeComponent,
   ],
   imports: [
     BrowserModule,

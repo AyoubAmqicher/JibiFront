@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="container mx-auto mt-8">
   <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Effectuer un paiement</h2>
   <div *ngIf="biller" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
@@ -34,7 +35,7 @@
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
         <tr *ngFor="let bill of getUnpaidBills()">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ bill.reference }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ bill.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ bill.description }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ bill.amount }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">

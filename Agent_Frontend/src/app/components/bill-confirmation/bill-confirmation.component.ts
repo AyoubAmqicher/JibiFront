@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FactureService } from '../../services/facture.service';
+import { SmsService } from '../../services/sms.service'; // Import the SmsService
+
+
+
 
 @Component({
   selector: 'app-bill-confirmation',
@@ -35,7 +40,8 @@ export class BillConfirmationComponent implements OnInit {
     // Ajoutez plus de factures impayées pour d'autres créanciers si nécessaire
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router,
+    private factureService: FactureService,private smsService: SmsService) {}
 
   ngOnInit() {
     const billerIdParam = this.route.snapshot.paramMap.get('billerId');
@@ -43,12 +49,18 @@ export class BillConfirmationComponent implements OnInit {
     const billerId = billerIdParam ? +billerIdParam : null;
     const billId = billIdParam ? +billIdParam : null;
     this.biller = this.billers.find(b => b.id === billerId);
-    this.bill = this.unpaidBills.find(b => b.id === billId);
-  }
+    if (billId) {
+      this.factureService.getFactureById(billId).subscribe(bill => {
+        this.bill = bill;
+      });
+    }  }
 
   confirmPayment() {
     // Logique pour envoyer le code SMS
-    console.log('Sending SMS for bill:', this.bill);
+    // this.smsService.sendSms('+212701020798', 'Your OTP code is 123456').subscribe(response => {
+    //   console.log('SMS sent:', response);
+    //   this.router.navigate(['/verify-code', this.biller.id, this.bill.id]);
+    // });
     this.router.navigate(['/verify-code', this.biller.id, this.bill.id]);
   }
 

@@ -12,6 +12,6 @@ export class AppComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    this.authService.loadJwtTokenFromLocalStorage();
+    // this.authService.loadJwtTokenFromLocalStorage();
   }
 }

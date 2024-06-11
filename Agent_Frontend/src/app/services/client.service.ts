@@ -12,7 +12,7 @@ export class ClientService {
     constructor(private http : HttpClient) {}
 
     createClient(clientData: FormData): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/create`, clientData);
+        return this.http.post<any>(`${this.apiUrl}/createClient`, clientData);
     }
 
     getAllClients(): Observable<Client[]> {

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FactureService } from '../../services/facture.service';
+import { Facture } from '../../model/facture.model'; // Import the Facture model
+
+
 
 @Component({
   selector: 'app-payment-detail',
@@ -20,23 +24,9 @@ export class PaymentDetailComponent implements OnInit {
     { id: 6, name: 'AMENDIS TETOUAN', description: 'FACTURES AMENDIS TÉTOUAN', icon: 'assets/amendis-tetouan.png', fields: ['Numéro de contrat', 'Code de facturation'] },
   ];
 
-  unpaidBills = [
-    { id: 1, billerId: 1, reference: '12345', description: 'Facture Internet', amount: '200 DH' },
-    { id: 2, billerId: 1, reference: '67890', description: 'Facture Téléphone', amount: '100 DH' },
-    { id: 3, billerId: 2, reference: '11223', description: 'Facture Internet', amount: '300 DH' },
-    { id: 4, billerId: 2, reference: '44556', description: 'Facture Téléphone', amount: '150 DH' },
-    { id: 5, billerId: 3, reference: '78901', description: 'Facture Eau', amount: '250 DH' },
-    { id: 6, billerId: 3, reference: '22334', description: 'Facture Électricité', amount: '400 DH' },
-    { id: 7, billerId: 4, reference: '55667', description: 'Facture Eau', amount: '350 DH' },
-    { id: 8, billerId: 4, reference: '88990', description: 'Facture Électricité', amount: '200 DH' },
-    { id: 9, billerId: 5, reference: '99887', description: 'Facture Eau', amount: '180 DH' },
-    { id: 10, billerId: 5, reference: '77665', description: 'Facture Électricité', amount: '220 DH' },
-    { id: 11, billerId: 6, reference: '33445', description: 'Facture Eau', amount: '290 DH' },
-    { id: 12, billerId: 6, reference: '66778', description: 'Facture Électricité', amount: '310 DH' },
-    // Ajoutez plus de factures impayées pour d'autres créanciers si nécessaire
-  ];
+  unpaidBills: Facture[] = []; // Use the Facture type
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router,private factureService: FactureService) {}
 
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -45,12 +35,16 @@ export class PaymentDetailComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Form submitted', this.formValues);
-    this.showUnpaidBills = true;
+    const clientId = '39d227c3-f711-4e45-90bd-6c5ec9f9aa12';
+    this.factureService.getUnpaidFacturesByClientIdAndOperateurId(clientId, this.biller.id).subscribe(data => {
+      this.unpaidBills = data;
+      this.showUnpaidBills = true;
+      console.log('Unpaid bills retrieved:', this.unpaidBills);
+    });
   }
 
   getUnpaidBills() {
-    return this.unpaidBills.filter(bill => bill.billerId === this.biller.id);
+    return this.unpaidBills;
   }
 
   payBill(billId: number) {
