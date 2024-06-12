@@ -11,6 +11,18 @@ export class AgentFormComponent implements OnInit {
   agentForm!: FormGroup;
   agentId: string | null = null;
   agentPassword: string | null = null;
+  agences: { id: number, name: string }[] = [
+    { id: 1, name: 'Jibi Casablanca' },
+    { id: 2, name: 'Jibi Rabat' },
+    { id: 3, name: 'Jibi Marrakech' },
+    { id: 4, name: 'Jibi Fès' },
+    { id: 5, name: 'Jibi Tangier' },
+    { id: 6, name: 'Jibi Agadir' },
+    { id: 7, name: 'Jibi Oujda' },
+    { id: 8, name: 'Jibi Kenitra' },
+    { id: 9, name: 'Jibi Meknes' },
+    { id: 10, name: 'Jibi El Jadida' }
+  ];
 
   @ViewChild('cinFrontInput') cinFrontInput!: ElementRef;
   @ViewChild('cinBackInput') cinBackInput!: ElementRef;
@@ -24,7 +36,8 @@ export class AgentFormComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', Validators.required),
       cinFront: new FormControl(null, Validators.required),
-      cinBack: new FormControl(null, Validators.required)
+      cinBack: new FormControl(null, Validators.required),
+      agence: new FormControl('',Validators.required)
     });
   }
 
@@ -40,10 +53,9 @@ export class AgentFormComponent implements OnInit {
         }
       }
     }
-
+    
     this.agentService.createAgent(formData).subscribe({
       next: (response) => {
-        console.log('Agent created successfully', response);
         this.agentId = response.id.toString(); // Ensure the ID is a string
         this.agentPassword = response.password;
         this.agentForm.reset(); // Reset the form after successful submission
