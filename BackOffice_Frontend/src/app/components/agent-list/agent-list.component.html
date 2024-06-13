@@ -1,15 +1,40 @@
 <div class="max-w-lg mx-auto p-6 my-10 bg-white rounded-lg shadow-md border-2 border-blue-500">
   <h2 class="text-2xl font-bold mb-6">Agents List</h2>
+  <div class="mb-4">
+    <input type="text" [formControl]="searchControl" placeholder="Search agents" class="form-control block w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300">
+  </div>
   <ul>
-    <li *ngFor="let agent of getCurrentPageAgents()" class="mb-4 p-4 border rounded-md">
-      <h3 class="text-xl font-bold">{{ agent.firstName }} {{ agent.lastName }}</h3>
-      <p>Email: {{ agent.email }}</p>
-      <p>Phone: {{ agent.phone }}</p>
+    <li *ngFor="let agent of getCurrentPageAgents()" class="mb-4 p-4 border rounded-md relative">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-xl font-bold">{{ agent.firstName }} {{ agent.lastName }}</h3>
+          <p>Email: {{ agent.email }}</p>
+          <p>Phone: {{ agent.phone }}</p>
+          <p *ngIf="agent.agence">Agence: {{ agent.agence.name }}</p>
+        </div>
+        <div class="relative">
+          <button (click)="toggleDropdown(agent)" class="text-gray-600 focus:outline-none">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 16.5c-.83 0-1.5.67-1.5 1.5S11.17 19.5 12 19.5 13.5 18.83 13.5 18 12.83 16.5 12 16.5zM12 11.5c-.83 0-1.5.67-1.5 1.5S11.17 14.5 12 14.5 13.5 13.83 13.5 13 12.83 11.5 12 11.5zM12 6.5c-.83 0-1.5.67-1.5 1.5S11.17 9.5 12 9.5 13.5 8.83 13.5 8 12.83 6.5 12 6.5z"/>
+            </svg>
+          </button>
+          <div *ngIf="agent.showDropdown" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md">
+            <a (click)="updateAgent(agent)" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Update</a>
+            <a (click)="deleteAgent(agent)" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Delete</a>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button (click)="openModal(agent)" class="mt-2 px-4 py-2 bg-red-500 text-white rounded">Details</button>
+      </div>
     </li>
   </ul>
+  
   <div class="flex justify-between mt-6">
     <button (click)="previousPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-blue-500 text-white rounded">Previous</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
     <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 bg-blue-500 text-white rounded">Next</button>
   </div>  
 </div>
+<app-agent-details-modal *ngIf="selectedAgent" [agent]="selectedAgent"></app-agent-details-modal>
+

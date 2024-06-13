@@ -7,13 +7,15 @@ import { AgentListComponent } from './components/agent-list/agent-list.component
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AgentDetailsModalComponent } from './components/agent-details-modal/agent-details-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AgentFormComponent,
     AgentListComponent,
-    NavbarComponent
+    NavbarComponent,
+    AgentDetailsModalComponent
   ],
     imports: [
         BrowserModule,

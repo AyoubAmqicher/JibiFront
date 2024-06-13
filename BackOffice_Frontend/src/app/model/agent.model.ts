@@ -1,5 +1,5 @@
 export interface Agent {
-  id: number;
+  id: String;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,4 +7,8 @@ export interface Agent {
   password: string;
   cinFront: File | null;
   cinBack: File | null;
+  agence: {
+    name: String;
+  };
+  showDropdown: false;
 }
