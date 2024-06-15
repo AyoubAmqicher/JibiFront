@@ -8,6 +8,7 @@ export interface Agent {
   cinFront: File | null;
   cinBack: File | null;
   agence: {
+    id: Number;
     name: String;
   };
   showDropdown: false;

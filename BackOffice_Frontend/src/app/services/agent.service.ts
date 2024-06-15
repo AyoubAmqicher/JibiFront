@@ -18,4 +18,15 @@ export class AgentService {
     getAllAgents(): Observable<Agent[]> {
         return this.http.get<Agent[]>(`${this.apiUrl}/all`);
     }
+
+    deleteAgentById(id: String): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    }
+    
+    updateAgent(id: String, agentData: any): Observable<any> {
+        return this.http.put<any>(`${this.apiUrl}/update/${id}`, agentData, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } 
+    
 }

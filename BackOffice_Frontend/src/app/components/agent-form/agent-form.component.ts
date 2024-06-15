@@ -53,7 +53,7 @@ export class AgentFormComponent implements OnInit {
         }
       }
     }
-    
+    this.agentForm.reset(); // Reset the form after successful submission
     this.agentService.createAgent(formData).subscribe({
       next: (response) => {
         this.agentId = response.id.toString(); // Ensure the ID is a string
