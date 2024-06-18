@@ -5,9 +5,12 @@ import { AppComponent } from './app.component';
 import { AgentFormComponent } from './components/agent-form/agent-form.component';
 import { AgentListComponent } from './components/agent-list/agent-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AgentDetailsModalComponent } from './components/agent-details-modal/agent-details-modal.component';
+import { LoginComponent } from './components/login/login.component';
+import { LoadingService } from './services/loading.service';
+import { AppHttpInterceptor } from './services/app-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,8 @@ import { AgentDetailsModalComponent } from './components/agent-details-modal/age
     AgentFormComponent,
     AgentListComponent,
     NavbarComponent,
-    AgentDetailsModalComponent
+    AgentDetailsModalComponent,
+    LoginComponent
   ],
     imports: [
         BrowserModule,
@@ -24,7 +28,11 @@ import { AgentDetailsModalComponent } from './components/agent-details-modal/age
         FormsModule,
         ReactiveFormsModule
     ],
-  providers: [],
+  providers: [LoadingService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AppHttpInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
