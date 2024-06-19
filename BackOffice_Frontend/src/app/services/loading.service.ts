@@ -11,9 +11,11 @@ export class LoadingService {
 
   showLoadingSpinner():void {
     this.isLoading$.next(true);
+    console.log('Show loading spinner'); // Debug log
   }
 
   hideLoadingSpinner():void {
     this.isLoading$.next(false);
+    console.log('Hide loading spinner'); // Debug log
   }
 }

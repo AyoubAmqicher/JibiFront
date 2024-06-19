@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {firstValueFrom, Observable} from "rxjs";
+import { Router } from '@angular/router';
 
 // import {AppStateService} from "./app-state.service";
 // import {jwtDecode} from "jwt-decode";
@@ -15,7 +16,7 @@ export class AuthService {
     phone:any;
     token!:any;
 
-    constructor(private http : HttpClient) { }
+    constructor(private http : HttpClient,private router : Router) { }
 
     login(username: string, password: string): Observable<string> {
         const httpOptions = {
@@ -25,6 +26,24 @@ export class AuthService {
             responseType: 'text' as 'text',
         };
         return this.http.post(`${this.apiUrl}/api/auth`, null, httpOptions);
+    }
+
+    isUserInRole(roleFromRoute: string) {
+        const roles = sessionStorage.getItem("app.roles");
+    
+        if (roles!.includes(",")) {
+            if (roles === roleFromRoute) {
+                return true;
+            }
+        } else {
+            const roleArray = roles!.split(",");
+            for (let role of roleArray) {
+                if (role === roleFromRoute) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 //   async changePassword(oldPassword: string, newPassword: string) {
@@ -40,10 +59,11 @@ export class AuthService {
 //     }
 //   }
 
-//   logout() {
-//     this.isAuthenticated = false;
-//     this.token = undefined;
-//     this.phone = undefined;
-//     this.roles = undefined;
-//   }
+  logout() {
+    this.isAuthenticated = false;
+    sessionStorage.setItem("app.token","");
+    this.phone = undefined;
+    sessionStorage.setItem("app.roles","");
+    this.router.navigateByUrl("/login", {replaceUrl: true});
+  }
 }

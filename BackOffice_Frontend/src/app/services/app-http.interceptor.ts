@@ -4,12 +4,13 @@ import { finalize, Observable, throwError } from 'rxjs';
 import { LoadingService } from './loading.service';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import { AuthService } from "../services/auth.service";
 
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-  constructor(private loadingService:LoadingService,private router : Router) { }
+  constructor(private loadingService:LoadingService,private router : Router,private authService : AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loadingService.showLoadingSpinner();
@@ -20,6 +21,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 Authorization: `Bearer ${token}`
             },
         });
+        this.authService.isAuthenticated = true;
     }
 
     return next.handle(request).pipe(

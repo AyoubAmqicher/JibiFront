@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit{
                 const decodedToken = jwtDecode<JwtPayload>(token);
                 // @ts-ignore
                 sessionStorage.setItem("app.roles",  decodedToken.scope);
+                this.authService.isAuthenticated = true;
+                console.log("is authenticated");
                 this.router.navigateByUrl("/create-agent");
             },
             error: (error) => this.errorMessage="Bad Credentiels"

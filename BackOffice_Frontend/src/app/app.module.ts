@@ -11,6 +11,7 @@ import { AgentDetailsModalComponent } from './components/agent-details-modal/age
 import { LoginComponent } from './components/login/login.component';
 import { LoadingService } from './services/loading.service';
 import { AppHttpInterceptor } from './services/app-http.interceptor';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AppHttpInterceptor } from './services/app-http.interceptor';
     AgentListComponent,
     NavbarComponent,
     AgentDetailsModalComponent,
-    LoginComponent
+    LoginComponent,
+    LoadingSpinnerComponent
   ],
     imports: [
         BrowserModule,
