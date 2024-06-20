@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'create-agent', component: AgentFormComponent,canActivate: [AuthenticationGuard], data: {role: 'ROLE_ADMIN'}} ,
   { path: 'list-agents', component: AgentListComponent,canActivate: [AuthenticationGuard], data: {role: 'ROLE_ADMIN'} },
   { path: 'login', component: LoginComponent,canActivate: [LoginGuard] },
-  { path: '', redirectTo: '/create-agent', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({

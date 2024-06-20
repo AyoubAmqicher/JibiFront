@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit{
                 sessionStorage.setItem("app.roles",  decodedToken.scope);
                 this.authService.isAuthenticated = true;
                 console.log("is authenticated");
-                this.router.navigateByUrl("/create-agent");
+                if(this.authService.isUserInRole("ROLE_ADMIN")) this.router.navigateByUrl("/list-agents");
             },
             error: (error) => this.errorMessage="Bad Credentiels"
         });
