@@ -8,9 +8,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent {
   dropdownOpen = false;
-  firstName = 'John';
-  lastName = 'Doe';
-
+  firstName = sessionStorage.getItem("app.firstName");
+  lastName = sessionStorage.getItem("app.lastName");
   constructor(private authService:AuthService){}
 
   toggleDropdown() {
