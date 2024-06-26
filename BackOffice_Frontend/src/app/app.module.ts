@@ -12,6 +12,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LoadingService } from './services/loading.service';
 import { AppHttpInterceptor } from './services/app-http.interceptor';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     NavbarComponent,
     AgentDetailsModalComponent,
     LoginComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    ChangePasswordComponent
   ],
     imports: [
         BrowserModule,

@@ -25,4 +25,8 @@ export class NavbarComponent {
   hasRole(role : string){
     return this.authService.isUserInRole(role);
   }
+
+  isLoggedIn(){
+    return !!sessionStorage.getItem("app.token");
+  }
 }

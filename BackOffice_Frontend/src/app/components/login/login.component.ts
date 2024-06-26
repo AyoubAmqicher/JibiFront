@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit{
                 this.authService.isAuthenticated = true;
                 console.log("is authenticated");
                 if(this.authService.isUserInRole("ROLE_ADMIN")) this.router.navigateByUrl("/list-agents");
+                if(this.authService.isUserInRole("ROLE_USER")) this.router.navigateByUrl("/change-password");
             },
             error: (error) => this.errorMessage="Bad Credentiels"
         });

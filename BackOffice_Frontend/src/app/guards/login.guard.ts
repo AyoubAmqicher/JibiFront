@@ -15,7 +15,8 @@ export class LoginGuard {
     if ( !sessionStorage.getItem("app.token")) {
         return true;
     } else {
-        if(this.authService.isUserInRole("ROLE_ADMIN")) this.router.navigateByUrl("/list-agents")
+        if(this.authService.isUserInRole("ROLE_ADMIN")) this.router.navigateByUrl("/list-agents");
+        if(this.authService.isUserInRole("ROLE_USER")) this.router.navigateByUrl("/change-password");
         return false;
     }
 }
